@@ -4,6 +4,8 @@ import { createDep, Dep } from './dep'
 
 type KeyToDepMap = Map<any, Dep>
 
+export type EffectScheduler = (...args: any[]) => any
+
 // 创建依赖数据结构
 const targerMap = new WeakMap<any, KeyToDepMap>()
 
@@ -19,7 +21,10 @@ export let activeEffect: ReactiveEffect | undefined
 export class ReactiveEffect<T = any> {
   computed?: ComputedRefImpl<T>
 
-  constructor(public fn: () => T) {}
+  constructor(
+    public fn: () => T,
+    public scheduler: EffectScheduler | null = null
+  ) {}
 
   run() {
     activeEffect = this
@@ -70,7 +75,7 @@ export function trigger(target: object, key: unknown, newValue: unknown) {
   const dep: Dep | undefined = depsMap.get(key)
   if (!dep) return
 
-  dep.forEach(fn => fn.run())
+  triggerEffects(dep)
 }
 
 /**
@@ -91,5 +96,9 @@ export function triggerEffects(dep: Dep) {
  * @param effect ReactiveEffect
  */
 export function triggerEffect(effect: ReactiveEffect) {
-  effect.run()
+  if (effect.scheduler) {
+    effect.scheduler()
+  } else {
+    effect.run()
+  }
 }
