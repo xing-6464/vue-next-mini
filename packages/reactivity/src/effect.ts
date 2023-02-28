@@ -45,5 +45,11 @@ export function track(target: object, key: unknown) {
  * @param newValue unknown
  */
 export function trigger(target: object, key: unknown, newValue: unknown) {
-  console.info('触发依赖')
+  const depsMap = targerMap.get(target)
+  if (!depsMap) return
+
+  const effect = depsMap.get(key) as ReactiveEffect
+  if (!effect) return
+
+  effect.fn()
 }
