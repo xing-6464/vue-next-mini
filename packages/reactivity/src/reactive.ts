@@ -2,6 +2,7 @@ import { mutableHandlers } from './baseHandlers'
 
 export const reactiveMap = new WeakMap<object, any>()
 
+// 响应式reactive
 export function reactive(target: object) {
   return createReactiveObject(target, mutableHandlers, reactiveMap)
 }
