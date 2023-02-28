@@ -8,16 +8,28 @@
   </head>
   <body></body>
   <script>
-    let quantity = 2
     let product = {
       price: 10,
-      quantity: quantity
+      quantity: 2
     }
+
+    const proxyProduct = new Proxy(product, {
+      set(target, key, newValue, receiver) {
+        console.info('setter')
+        target[key] = newValue
+        effect()
+        return true
+      },
+      get(target, key, receiver) {
+        console.info('getter')
+        return target[key]
+      }
+    })
 
     let total = 0
 
     let effect = () => {
-      total = product.price * product.quantity
+      total = proxyProduct.price * proxyProduct.quantity
     }
 
     effect()
