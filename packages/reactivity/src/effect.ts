@@ -1,3 +1,8 @@
+type KeyToDepMap = Map<any, ReactiveEffect>
+
+// 创建依赖数据结构
+const targerMap = new WeakMap<any, KeyToDepMap>()
+
 export function effect<T = any>(fn: () => T) {
   const _effect = new ReactiveEffect(fn)
 
@@ -23,7 +28,14 @@ export class ReactiveEffect<T = any> {
  * @param key unknown
  */
 export function track(target: object, key: unknown) {
-  console.info('收集依赖')
+  if (!activeEffect) return
+
+  let depsMap = targerMap.get(target)
+  if (!depsMap) {
+    targerMap.set(target, (depsMap = new Map()))
+  }
+
+  depsMap.set(key, activeEffect)
 }
 
 /**
