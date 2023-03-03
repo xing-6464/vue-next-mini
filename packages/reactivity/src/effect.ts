@@ -17,7 +17,6 @@ export function effect<T = any>(fn: () => T) {
 
 // Effect对象
 export let activeEffect: ReactiveEffect | undefined
-
 export class ReactiveEffect<T = any> {
   computed?: ComputedRefImpl<T>
 
