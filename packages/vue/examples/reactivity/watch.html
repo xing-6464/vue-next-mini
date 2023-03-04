@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="../../dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script>
+      const { reactive, watch } = Vue
+
+      const obj = reactive({
+        count: 0
+      })
+
+      watch(
+        obj,
+        (value, oldValue) => {
+          console.info('watch 监听被触发')
+          console.info('value', value)
+        },
+        {
+          immediate: true
+        }
+      )
+
+      setTimeout(() => {
+        obj.count = 1
+      }, 2000)
+    </script>
+  </body>
+</html>
