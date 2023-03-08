@@ -14,7 +14,11 @@ export function isVNode(value: any): value is VNode {
 }
 
 export function createVNode(type: any, props?: any, children?: any): VNode {
-  const shapeFlag = isString(type) ? ShapeFlags.ELEMENT : 0
+  const shapeFlag = isString(type)
+    ? ShapeFlags.ELEMENT
+    : isObject(type)
+    ? ShapeFlags.STATEFUL_COMPONENT
+    : 0
 
   return createBaseVNode(type, props, children, shapeFlag)
 }
